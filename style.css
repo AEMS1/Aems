@@ -1,0 +1,17 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.container {
+  padding: 20px;
+}
+.swap-box {
+  margin-top: 20px;
+}
+input, select, button {
+  margin: 5px;
+  padding: 10px;
+}

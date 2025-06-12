@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Solana Swap DEX</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Solana Swap</h1>
+    <button id="connectWallet">Connect Phantom Wallet</button>
+    <div id="walletAddress"></div>
+
+    <div class="swap-box">
+      <select id="fromToken"></select>
+      <input type="number" id="fromAmount" placeholder="Amount to swap" />
+      <select id="toToken"></select>
+      <input type="text" id="toAmount" readonly />
+      <button id="swapBtn">Swap</button>
+    </div>
+  </div>
+
+  <script src="jupiter.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

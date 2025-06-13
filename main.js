@@ -50,3 +50,4 @@ document.getElementById("swapBtn").onclick = async () => {
     alert("Swap failed: " + err.message);
   }
 };
+

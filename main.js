@@ -1,43 +1,52 @@
 let walletAddress = null;
+let tokens = [];
 
-document.getElementById('connectWallet').onclick = async () => {
+document.getElementById("connectWallet").onclick = async () => {
   try {
     const resp = await window.solana.connect();
     walletAddress = resp.publicKey.toString();
-    document.getElementById('walletAddress').innerText = 'Wallet: ' + walletAddress;
-    loadTokens();
+    document.getElementById("walletAddress").innerText = "Wallet: " + walletAddress;
+    tokens = await getTokens();
+    populateTokenDropdowns();
   } catch (err) {
-    alert('Wallet connection failed!');
+    alert("Wallet connection failed!");
   }
 };
 
-async function loadTokens() {
-  const tokenList = await getTokens();
-  const fromToken = document.getElementById('fromToken');
-  const toToken = document.getElementById('toToken');
-  tokenList.forEach(token => {
-    let opt = document.createElement('option');
-    opt.value = token.address;
-    opt.innerText = token.symbol;
-    fromToken.appendChild(opt.cloneNode(true));
-    toToken.appendChild(opt);
+function populateTokenDropdowns() {
+  const from = document.getElementById("fromToken");
+  const to = document.getElementById("toToken");
+  tokens.forEach(t => {
+    const opt1 = document.createElement("option");
+    opt1.value = t.address;
+    opt1.innerText = t.symbol;
+    from.appendChild(opt1);
+    const opt2 = opt1.cloneNode(true);
+    to.appendChild(opt2);
   });
 }
 
-document.getElementById('swapBtn').onclick = async () => {
-  const from = document.getElementById('fromToken').value;
-  const to = document.getElementById('toToken').value;
-  const amount = parseFloat(document.getElementById('fromAmount').value);
-  if (!walletAddress || !from || !to || !amount) return alert('Missing fields');
+document.getElementById("swapBtn").onclick = async () => {
+  if (!walletAddress) return alert("Connect wallet first!");
+  const fromMint = document.getElementById("fromToken").value;
+  const toMint = document.getElementById("toToken").value;
+  const amountFloat = parseFloat(document.getElementById("fromAmount").value);
+  if (isNaN(amountFloat) || amountFloat <= 0) return alert("Enter a valid amount");
+  const decimals = tokens.find(t => t.address === fromMint).decimals;
+  const amount = Math.floor(amountFloat * 10 ** decimals);
+
+  const route = await getSwapRoute(fromMint, toMint, amount);
+  if (!route) return alert("No route found");
+
   try {
-    const route = await getSwapRoute(from, to, amount);
-    if (!route) return alert('No route found');
     const tx = await createSwapTransaction(walletAddress, route);
-    const signedTx = await window.solana.signTransaction(tx);
-    const result = await sendTransaction(signedTx);
-    alert('Swap complete! TX: ' + result);
+    const signed = await window.solana.signTransaction(tx);
+    const conn = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
+    const txid = await conn.sendRawTransaction(signed.serialize());
+    await conn.confirmTransaction(txid);
+    document.getElementById("status").innerText = "Swap successful! TXID: " + txid;
   } catch (err) {
     console.error(err);
-    alert('Swap failed!');
+    alert("Swap failed: " + err.message);
   }
 };

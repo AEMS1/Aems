@@ -1,3 +1,4 @@
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f1f1f1;
@@ -15,6 +16,7 @@ input, select, button {
   margin: 5px;
   padding: 10px;
 }
+
 #status {
   margin-top: 10px;
   color: green;

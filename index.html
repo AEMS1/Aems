@@ -15,11 +15,12 @@
       <select id="fromToken"></select>
       <input type="number" id="fromAmount" placeholder="Amount to swap" />
       <select id="toToken"></select>
-      <input type="text" id="toAmount" readonly />
       <button id="swapBtn">Swap</button>
+      <div id="status"></div>
     </div>
   </div>
 
+  <script src="https://unpkg.com/@solana/web3.js/lib/index.iife.js"></script>
   <script src="jupiter.js"></script>
   <script src="main.js"></script>
 </body>

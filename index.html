@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AEMS Real Swap</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="tokens.js"></script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <div class="top-bar">
+    <button id="connectWallet">Connect Wallet</button>
+    <span id="walletInfo"></span>
+  </div>
+  <div class="swap-box">
+    <h1>AEMS Swap</h1>
+    <label for="tokenIn">From Token:</label>
+    <select id="tokenIn"></select>
+    <div id="balanceIn" class="balance"></div>
+    <input type="text" id="amountIn" placeholder="Amount In">
+
+    <label for="tokenOut">To Token:</label>
+    <select id="tokenOut"></select>
+    <input type="text" id="amountOut" placeholder="Amount Out" readonly>
+
+    <button id="swapButton">Swap</button>
+  </div>
+</body>
+</html>

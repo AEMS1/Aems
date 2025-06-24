@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AEMS DEX</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="web3.min.js"></script>
+  <script src="walletconnect.min.js"></script>
+  <script src="tokens.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>AEMS Swap</h1>
+    <div id="wallet-address">Not connected</div>
+    <button onclick="connectWallet()">Connect Wallet</button>
+
+    <div class="swap-box">
+      <label>From Token:</label>
+      <select id="from-token"></select>
+      <input type="text" id="from-amount" placeholder="Amount" />
+
+      <label>To Token:</label>
+      <select id="to-token"></select>
+      <button onclick="swap()">Swap</button>
+    </div>
+
+    <div id="price-info"></div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

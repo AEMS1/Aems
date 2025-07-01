@@ -1,0 +1,49 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #111;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+.race-track {
+  position: relative;
+  background: #333;
+  height: 120px;
+  margin: 20px auto;
+  max-width: 700px;
+  border-radius: 8px;
+  border: 2px solid #666;
+  overflow: hidden;
+}
+.car {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  font-size: 2rem;
+  transition: left 0.2s ease;
+}
+.opponent {
+  top: 60px;
+  opacity: 0.5;
+}
+#finish-line {
+  position: absolute;
+  right: 10px;
+  top: 45px;
+  font-size: 2rem;
+}
+.controls button {
+  padding: 10px 30px;
+  margin: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+#walletAddress {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+.slippery-zone {
+  background-color: #88ccff !important;
+}

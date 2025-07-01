@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AEMS Race Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>AEMS Race Game</h1>
+  <div class="game-area">
+    <div id="countdown">Ready?</div>
+    <div class="race-track">
+      <div id="finish-line">🏁</div>
+      <div class="car" id="playerCar">🚗</div>
+      <div class="car opponent" id="opponentCar">🚙</div>
+    </div>
+    <div class="controls">
+      <button id="btnA">A</button>
+      <button id="btnL">L</button>
+    </div>
+    <div class="wallet">
+      <button id="connect">Connect Wallet</button>
+      <div id="walletAddress"></div>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="abi.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

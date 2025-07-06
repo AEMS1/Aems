@@ -68,6 +68,7 @@ function startGame() {
           document.getElementById("turnIndicator").innerText =
             currentPlayer === "X" ? "Your Turn" : "Opponent Turn";
         }
+        
       }
     });
     board.appendChild(cell);

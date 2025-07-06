@@ -1,109 +1,75 @@
-
-let provider, signer, contract, token;
-let clicks = 0;
-let expectedKey = 'a';
-let position = 0;
-let slipperyStart = 0;
-let slipperyEnd = 0;
-let isSlippery = false;
-const finishClicks = 35;
+let web3;
+let userAccount;
+let contract;
 
 async function connectWallet() {
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  signer = provider.getSigner();
-  const address = await signer.getAddress();
-  document.getElementById("walletAddress").innerText = address;
-
-  contract = new ethers.Contract(contractAddress, contractABI, signer);
-  token = new ethers.Contract(tokenAddress, tokenABI, signer);
-
-  // Approve tokens
-  const amount = ethers.utils.parseUnits("3000", 18);
-  const approveTx = await token.approve(contractAddress, amount);
-  await approveTx.wait();
-
-  const joinTx = await contract.joinGame();
-  await joinTx.wait();
-
-  startGame();
+  if (window.ethereum) {
+    web3 = new Web3(window.ethereum);
+    await window.ethereum.enable();
+    const accounts = await web3.eth.getAccounts();
+    userAccount = accounts[0];
+    contract = new web3.eth.Contract(contractABI, contractAddress);
+    document.getElementById("status").innerText = Connected: ${userAccount};
+    document.getElementById("gameLobby").style.display = "block";
+  } else {
+    alert("Please install MetaMask.");
+  }
 }
+
+document.getElementById("connectButton").onclick = connectWallet;
+
+document.getElementById("joinGameButton").onclick = async () => {
+  document.getElementById("gameStatus").innerText = "Searching for opponent...";
+
+  setTimeout(() => {
+    document.getElementById("gameStatus").innerText = "Opponent found! Game starting!";
+    startGame();
+  }, 3000);
+};
 
 function startGame() {
-  clicks = 0;
-  position = 0;
-  expectedKey = 'a';
-  document.getElementById("status").innerText = "";
-  document.getElementById("playerCar").style.left = "0%";
-  setSlipperyZone();
+  document.getElementById("gameBoard").style.display = "block";
+  document.getElementById("turnIndicator").innerText = "Your Turn";
+  const board = document.getElementById("board");
+  board.innerHTML = "";
 
-  let countdown = 3;
-  const countdownEl = document.getElementById("countdown");
-  countdownEl.innerText = countdown;
-  const timer = setInterval(() => {
-    countdown--;
-    if (countdown === 0) {
-      clearInterval(timer);
-      countdownEl.innerText = "";
-      document.getElementById("status").innerText = "GO!";
-    } else {
-      countdownEl.innerText = countdown;
-    }
-  }, 1000);
-}
+  let state = Array(9).fill(null);
+  let currentPlayer = "X";
 
-function setSlipperyZone() {
-  const range = Math.floor(finishClicks * 0.16);
-  slipperyStart = Math.floor(Math.random() * (finishClicks - range));
-  slipperyEnd = slipperyStart + range;
-}
-
-function handleClick(key) {
-  if (clicks >= finishClicks) return;
-
-  if (key === expectedKey) {
-    clicks++;
-    expectedKey = key === 'a' ? 'l' : 'a';
-
-    if (clicks >= slipperyStart && clicks <= slipperyEnd) {
-      if (!isSlippery) {
-        isSlippery = true;
-        document.querySelector(".race-track").classList.add("slippery-zone");
-        document.getElementById("status").innerText = "You're on a slippery zone!";
+  function checkWinner() {
+    const wins = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,3,6], [1,4,7], [2,5,8],
+      [0,4,8], [2,4,6]
+    ];
+    for (const [a,b,c] of wins) {
+      if (state[a] && state[a] === state[b] && state[a] === state[c]) {
+        return state[a];
       }
-      if (Math.random() < 0.2) {
-        document.getElementById("status").innerText = "You slipped!";
-        return;
+    }
+    return state.includes(null) ? null : "draw";
+  }
+
+  state.forEach((_, i) => {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.addEventListener("click", () => {
+      if (!state[i] && !checkWinner()) {
+        state[i] = currentPlayer;
+        cell.textContent = currentPlayer;
+        cell.classList.add(currentPlayer);
+
+        const winner = checkWinner();
+        if (winner) {
+          document.getElementById("turnIndicator").innerText =
+            winner === "draw" ? "Draw!" : ${winner} wins!;
+        } else {
+          currentPlayer = currentPlayer === "X" ? "O" : "X";
+          document.getElementById("turnIndicator").innerText =
+            currentPlayer === "X" ? "Your Turn" : "Opponent Turn";
+        }
       }
-    } else if (isSlippery && clicks > slipperyEnd) {
-      isSlippery = false;
-      document.querySelector(".race-track").classList.remove("slippery-zone");
-      document.getElementById("status").innerText = "You exited the slippery zone.";
-    }
-
-    position += (100 / finishClicks);
-    document.getElementById("playerCar").style.left = position + "%";
-
-    if (clicks >= finishClicks) {
-      document.getElementById("status").innerText = "🏆 You reached the finish line!";
-      submitResult(1);
-    }
-  } else {
-    document.getElementById("status").innerText = "Wrong key! Press " + expectedKey.toUpperCase();
-  }
-}
-
-document.getElementById("connect").addEventListener("click", connectWallet);
-document.getElementById("btnA").addEventListener("click", () => handleClick('a'));
-document.getElementById("btnL").addEventListener("click", () => handleClick('l'));
-
-async function submitResult(winner) {
-  try {
-    const tx = await contract.submitWinner(winner);
-    await tx.wait();
-    document.getElementById("status").innerText += " (Reward Sent)";
-  } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText = "Error submitting result.";
-  }
+    });
+    board.appendChild(cell);
+  });
 }

@@ -1,33 +1,26 @@
-
-const contractAddress = "0xae85d873adaf9616836909b13aabf2addecad7cd";
-const tokenAddress = "0x259115680169276d0e4286ACBa362460456697C5";
-
 const contractABI = [
   {
-    "inputs": [],
-    "name": "joinGame",
-    "outputs": [],
+    "inputs": [
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "transfer",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": ["uint256"],
-    "name": "submitWinner",
-    "outputs": [],
+    "inputs": [
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "transferFrom",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
     "type": "function"
   }
 ];
 
-const tokenABI = [
-  {
-    "constant": false,
-    "inputs": [
-      { "name": "spender", "type": "address" },
-      { "name": "amount", "type": "uint256" }
-    ],
-    "name": "approve",
-    "outputs": [{ "name": "", "type": "bool" }],
-    "type": "function"
-  }
-];
+const contractAddress = "0xd90135610848d41ec9ea41fcba2f772103b8a9f7";
+const tokenAddress = "0x259115680169276d0e4286acba362460456697c5";

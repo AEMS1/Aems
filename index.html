@@ -1,31 +1,29 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AEMS Race Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Element Duel - Blockchain PvP</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>AEMS Race Game</h1>
-  <div class="game-area">
-    <div id="countdown">Ready?</div>
-    <div class="race-track">
-      <div id="finish-line">🏁</div>
-      <div class="car" id="playerCar">🚗</div>
-      <div class="car opponent" id="opponentCar">🚙</div>
+  <div class="container">
+    <h1>⚔️ Element Duel Game</h1>
+    <button id="connectButton">🔌 Connect Wallet</button>
+    <p id="status">Not connected</p>
+
+    <div id="gameLobby" style="display: none;">
+      <button id="joinGameButton">🎮 Join Match (1000 LGD)</button>
+      <p id="gameStatus"></p>
     </div>
-    <div class="controls">
-      <button id="btnA">A</button>
-      <button id="btnL">L</button>
+
+    <div id="gameBoard" style="display: none;">
+      <h3 id="turnIndicator">Waiting...</h3>
+      <div class="board" id="board"></div>
     </div>
-    <div class="wallet">
-      <button id="connect">Connect Wallet</button>
-      <div id="walletAddress"></div>
-    </div>
-    <div class="status" id="status"></div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script src="abi.js"></script>
   <script src="main.js"></script>
 </body>

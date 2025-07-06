@@ -1,49 +1,72 @@
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #111;
-  color: white;
-  text-align: center;
+  background: #1e1e1e;
+  color: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   padding: 20px;
+  min-height: 100vh;
+  margin: 0;
 }
-.race-track {
-  position: relative;
-  background: #333;
-  height: 120px;
-  margin: 20px auto;
-  max-width: 700px;
-  border-radius: 8px;
-  border: 2px solid #666;
-  overflow: hidden;
+
+.container {
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
 }
-.car {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  font-size: 2rem;
-  transition: left 0.2s ease;
-}
-.opponent {
-  top: 60px;
-  opacity: 0.5;
-}
-#finish-line {
-  position: absolute;
-  right: 10px;
-  top: 45px;
-  font-size: 2rem;
-}
-.controls button {
-  padding: 10px 30px;
+
+button {
+  background: #2d89ef;
+  color: white;
+  padding: 12px 20px;
   margin: 10px;
-  font-size: 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
 }
-#walletAddress {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #aaa;
+
+button:hover {
+  background: #1e5edc;
 }
-.slippery-zone {
-  background-color: #88ccff !important;
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 5px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background: #333;
+  font-size: 2em;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cell.X {
+  color: #f44336;
+}
+
+.cell.O {
+  color: #4caf50;
+}
+
+@media (max-width: 600px) {
+  .board {
+    grid-template-columns: repeat(3, 80px);
+  }
+  .cell {
+    width: 80px;
+    height: 80px;
+    font-size: 1.5em;
+  }
 }

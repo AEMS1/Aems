@@ -1,0 +1,20 @@
+const tokenList = [
+  {
+    symbol: "WBNB",
+    address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+    priceId: "wbnb",
+    decimals: 18
+  },
+  {
+    symbol: "BUSD",
+    address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+    priceId: "binance-usd",
+    decimals: 18
+  },
+  {
+    symbol: "USDT",
+    address: "0x55d398326f99059ff775485246999027b3197955",
+    priceId: "tether",
+    decimals: 18
+  }
+];

@@ -1,195 +1,31 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mini BSC DEX</title>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #111827;
-      color: white;
-      padding: 20px;
-    }
-    .container {
-      max-width: 400px;
-      margin: auto;
-      background: #1f2937;
-      padding: 20px;
-      border-radius: 12px;
-    }
-    select, input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-    }
-    button {
-      background-color: #10b981;
-      color: white;
-      cursor: pointer;
-    }
-    .info-box {
-      font-size: 14px;
-      background: #374151;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    .price-label {
-      font-size: 13px;
-      color: #9ca3af;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple DEX</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h2>Mini BSC DEX</h2>
-    <button onclick="connectWallet()">🔌 Connect Wallet</button><label>From Token:</label>
-<select id="fromToken" onchange="updatePriceLabels()"></select>
-<div class="price-label" id="fromPriceLabel"></div>
-
-<label>To Token:</label>
-<select id="toToken" onchange="updatePriceLabels()"></select>
-<div class="price-label" id="toPriceLabel"></div>
-
-<label>Amount:</label>
-<input type="number" id="inputAmount" placeholder="Enter amount" oninput="calculateSwapDetails()" />
-
-<button onclick="executeSwap()">Swap with 0.015% Fee</button>
-
-<div class="info-box" id="swapInfo"></div>
-
-  </div>  <script>
-    const tokens = [
-      { symbol: "BNB", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", priceId: "binancecoin", decimals: 18 },
-      { symbol: "BUSD", address: "0xe9e7cea3dedca5984780bafc599bd69add087d56", priceId: "binance-usd", decimals: 18 },
-      { symbol: "USDT", address: "0x55d398326f99059ff775485246999027b3197955", priceId: "tether", decimals: 18 },
-      { symbol: "USDC", address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", priceId: "usd-coin", decimals: 18 },
-      { symbol: "WBNB", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", priceId: "wbnb", decimals: 18 },
-    ];
-
-    const PANCAKE_ROUTER = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
-    const FEE_RECEIVER = "0xec54951C7d4619256Ea01C811fFdFa01A9925683";
-    let selectedAccount;
-    let web3;
-
-    const ROUTER_ABI = [
-      {
-        "inputs": [
-          { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
-          { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-          { "internalType": "address[]", "name": "path", "type": "address[]" },
-          { "internalType": "address", "name": "to", "type": "address" },
-          { "internalType": "uint256", "name": "deadline", "type": "uint256" }
-        ],
-        "name": "swapExactTokensForTokens",
-        "outputs": [ { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" } ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      }
-    ];
-
-    async function connectWallet() {
-      if (window.ethereum) {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        web3 = new Web3(window.ethereum);
-        const accounts = await web3.eth.getAccounts();
-        selectedAccount = accounts[0];
-        alert("Wallet connected: " + selectedAccount);
-      }
-    }
-
-    function populateTokenSelects() {
-      const fromSelect = document.getElementById("fromToken");
-      const toSelect = document.getElementById("toToken");
-      tokens.forEach(token => {
-        const opt1 = document.createElement("option");
-        const opt2 = document.createElement("option");
-        opt1.value = token.address;opt1.text = token.symbol;
-        opt2.value = token.address;
-        opt2.text = token.symbol;
-        fromSelect.appendChild(opt1);
-        toSelect.appendChild(opt2);
-      });
-      fromSelect.selectedIndex = 0;
-      toSelect.selectedIndex = 1;
-      updatePriceLabels();
-    }
-
-    async function fetchPrice(symbolId) {
-      const res = await fetch(https://api.coingecko.com/api/v3/simple/price?ids=${symbolId}&vs_currencies=usd);
-      const data = await res.json();
-      return data[symbolId].usd;
-    }
-
-    async function updatePriceLabels() {
-      const fromSymbol = tokens.find(t => t.address === document.getElementById("fromToken").value).priceId;
-      const toSymbol = tokens.find(t => t.address === document.getElementById("toToken").value).priceId;
-      const fromPrice = await fetchPrice(fromSymbol);
-      const toPrice = await fetchPrice(toSymbol);
-      document.getElementById("fromPriceLabel").innerText = 1 ${fromSymbol.toUpperCase()} ≈ ${fromPrice} USD;
-      document.getElementById("toPriceLabel").innerText = 1 ${toSymbol.toUpperCase()} ≈ ${toPrice} USD;
-      calculateSwapDetails();
-    }
-
-    async function calculateSwapDetails() {
-      const amount = parseFloat(document.getElementById("inputAmount").value);
-      if (isNaN(amount) || amount <= 0) return;
-
-      const feePercent = 0.00015;
-      const feeAmount = amount * feePercent;
-      const amountAfterFee = amount - feeAmount;
-
-      const fromSymbol = tokens.find(t => t.address === document.getElementById("fromToken").value).priceId;
-      const toSymbol = tokens.find(t => t.address === document.getElementById("toToken").value).priceId;
-      const fromPrice = await fetchPrice(fromSymbol);
-      const toPrice = await fetchPrice(toSymbol);
-
-      const estimatedUSD = amountAfterFee * fromPrice;
-      const estimatedReceive = estimatedUSD / toPrice;
-
-      document.getElementById("swapInfo").innerHTML = 
-        💱 مقدار وارد شده: ${amount.toFixed(6)}
-        <br>📉 کارمزد 0.015٪: ${feeAmount.toFixed(6)}
-        <br>✅ مقدار قابل تبدیل: ${amountAfterFee.toFixed(6)}
-        <br>🎯 مقدار دریافتی تخمینی: ${estimatedReceive.toFixed(4)} ${toSymbol.toUpperCase()}
-      ;
-    }
-
-    async function executeSwap() {
-      const fromAddress = document.getElementById("fromToken").value;
-      const toAddress = document.getElementById("toToken").value;
-      const amount = parseFloat(document.getElementById("inputAmount").value);
-      if (!web3 || !selectedAccount || isNaN(amount) || amount <= 0) return alert("Wallet or amount missing.");
-
-      const fromToken = tokens.find(t => t.address === fromAddress);
-      const feePercent = 0.00015;
-      const feeAmount = web3.utils.toWei((amount * feePercent).toString(), "ether");
-      const amountAfterFee = web3.utils.toWei((amount - amount * feePercent).toString(), "ether");
-
-      const token = new web3.eth.Contract([{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"amount","type":"uint256"}],"name":"approve","outputs":[],"type":"function"}], fromAddress);
-
-      await token.methods.approve(PANCAKE_ROUTER, amountAfterFee).send({ from: selectedAccount });
-
-      const router = new web3.eth.Contract(ROUTER_ABI, PANCAKE_ROUTER);
-      const path = [fromAddress, toAddress];
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
-
-      await router.methods.swapExactTokensForTokens(
-        amountAfterFee,
-        0,
-        path,
-        selectedAccount,
-        deadline
-      ).send({ from: selectedAccount });
-
-      await web3.eth.sendTransaction({ from: selectedAccount, to: FEE_RECEIVER, value: feeAmount });
-
-      alert("✅ Swap and fee sent successfully!");
-    }
-
-    populateTokenSelects();
-  </script></body>
+    <h1>🪙 Simple DEX on BSC</h1>
+    <button id="connect">Connect Wallet</button>
+    <div class="swap-box">
+      <label>From:</label>
+      <select id="fromToken"></select>
+      <label>To:</label>
+      <select id="toToken"></select>
+      <input type="number" id="amount" placeholder="Amount to swap" />
+      <button id="swap">Swap</button>
+      <div class="info">
+        <p>Fee (0.015%): <span id="fee">-</span></p>
+        <p>Net Amount: <span id="net">-</span></p>
+        <p>Estimated Receive: <span id="receive">-</span></p>
+      </div>
+    </div>
+  </div>
+  <script src="tokenList.js"></script>
+  <script src="main.js"></script>
+</body>
 </html>

@@ -1,5 +1,10 @@
 const tokenList = [
   {
+    symbol: "BNB",
+    address: "0xBB4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+    decimals: 18
+  },
+  {
     symbol: "WBNB",
     address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
     decimals: 18
@@ -17,11 +22,6 @@ const tokenList = [
   {
     symbol: "CAKE",
     address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
-    decimals: 18
-  },
-  {
-    symbol: "reef",
-    address: "0xF21768cCBC73Ea5B6fd3C687208a7c2def2d966e",
     decimals: 18
   },
   {

@@ -1,1 +1,30 @@
-<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'/><title>DEX Swap</title><link rel='stylesheet' href='style.css' /></head><body><div class='container'><h1>صرافی غیرمتمرکز</h1><button id='connectButton'>اتصال کیف پول</button><select id='fromToken'></select><select id='toToken'></select><input type='number' id='amountIn' placeholder='مقدار ورودی' /><button id='swapButton'>سوآپ</button><div id='info'></div><div id='priceInfo'></div><div id='chartContainer' style='margin-top: 20px;'></div></div><script src='https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js'></script><script src='tokenList.js'></script><script src='main.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DEX Swap</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>صرافی غیرمتمرکز</h1>
+    <button id="connectButton">اتصال کیف پول</button>
+
+    <select id="fromToken"></select>
+    <select id="toToken"></select>
+
+    <input type="number" id="amountIn" placeholder="مقدار ورودی" />
+
+    <button id="swapButton">سوآپ</button>
+
+    <div id="info"></div>
+    <div id="priceInfo"></div>
+    <div id="chartContainer" style="margin-top: 20px;"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="tokenList.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

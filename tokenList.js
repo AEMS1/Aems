@@ -18,9 +18,9 @@ const tokenList = [
     decimals: 18
   },
    {
-    symbol: "reef",
+    symbol: "AMS",
     id: "pancakeswap-token",
-    address: "0xF21768cCBC73Ea5B6fd3C687208a7c2def2d966e",
+    address: "0x259115680169276d0e4286acba362460456697c5",
     decimals: 18
   },
   {

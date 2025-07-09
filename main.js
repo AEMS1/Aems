@@ -5,6 +5,8 @@ const toTokenSelect = document.getElementById("toToken");
 const amountInInput = document.getElementById("amountIn");
 const info = document.getElementById("info");
 const priceInfo = document.getElementById("priceInfo");
+const receiveInfo = document.getElementById("receiveInfo");
+const feeInfo = document.getElementById("feeInfo");
 const FEE_RECEIVER = "0xec54951C7d4619256Ea01C811fFdFa01A9925683";
 const WBNB_ADDRESS = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 
@@ -30,9 +32,9 @@ connectButton.onclick = async () => {
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     account = await signer.getAddress();
-    connectButton.innerText = "متصل شد: " + account.slice(0, 6) + "...";
+    connectButton.innerText = "Connected: " + account.slice(0, 6) + "...";
   } else {
-    alert("لطفاً متامسک را نصب کنید!");
+    alert("Please install MetaMask!");
   }
 };
 
@@ -41,7 +43,7 @@ swapButton.onclick = async () => {
     const amountIn = parseFloat(amountInInput.value);
     const fromToken = tokenList.find(t => t.address === fromTokenSelect.value);
     const toToken = tokenList.find(t => t.address === toTokenSelect.value);
-    if (!fromToken || !toToken || !amountIn) return alert("مقادیر نامعتبر");
+    if (!fromToken || !toToken || !amountIn) return alert("Invalid input");
 
     const decimals = fromToken.decimals;
     const amountInWei = ethers.utils.parseUnits(amountIn.toString(), decimals);
@@ -75,8 +77,9 @@ swapButton.onclick = async () => {
         ],
         signer
       );
+
       const tokenBalance = await tokenContract.balanceOf(account);
-      if (tokenBalance.lt(amountInWei)) return alert("❌ موجودی کافی ندارید!");
+      if (tokenBalance.lt(amountInWei)) return alert("❌ Insufficient balance!");
 
       await tokenContract.approve("0x10ED43C718714eb63d5aA57B78B54704E256024E", netAmount);
       await tokenContract.transfer(FEE_RECEIVER, fee);
@@ -91,10 +94,10 @@ swapButton.onclick = async () => {
       await router.swapExactTokensForTokens(netAmount, 0, path, account, Math.floor(Date.now() / 1000) + 60 * 20);
     }
 
-    info.innerText = "✅ سواپ انجام شد!";
+    info.innerText = "✅ Swap successful!";
   } catch (err) {
     console.error("Swap error:", err);
-    alert("❌ خطا در انجام سوآپ!");
+    alert("❌ Swap failed!");
   }
 };
 
@@ -109,13 +112,19 @@ amountInInput.oninput = async () => {
     const json = await res.json();
     const fromPrice = json[fromToken.id].usd;
     const toPrice = json[toToken.id].usd;
+
     const expected = (amount * fromPrice) / toPrice;
-    const fee = amount * 0.005;
+    const fee = expected * 0.005;
     const received = expected - fee;
 
-    priceInfo.innerText = `قیمت تقریبی: ${expected.toFixed(6)} ${toToken.symbol} | فی: ${fee.toFixed(6)} | دریافتی: ${received.toFixed(6)} ${toToken.symbol}`;
+    priceInfo.innerText = `${fromToken.symbol} ≈ ${fromPrice.toFixed(2)} USDT`;
+    receiveInfo.innerText = `You will receive: ${received.toFixed(4)} ${toToken.symbol}`;
+    feeInfo.innerText = `0.5% fee`;
+
   } catch (err) {
-    priceInfo.innerText = "❌ دریافت قیمت ممکن نیست.";
+    priceInfo.innerText = "❌ Failed to fetch price.";
+    receiveInfo.innerText = "";
+    feeInfo.innerText = "";
   }
 };
 

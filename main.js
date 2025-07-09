@@ -47,7 +47,7 @@ swapButton.onclick = async () => {
 
     const decimals = fromToken.decimals;
     const amountInWei = ethers.utils.parseUnits(amountIn.toString(), decimals);
-    const fee = amountInWei.mul(5).div(1000); // 0.5%
+    const fee = amountInWei.div(100); // 1%
     const netAmount = amountInWei.sub(fee);
 
     if (fromToken.symbol === "BNB") {
@@ -114,12 +114,12 @@ amountInInput.oninput = async () => {
     const toPrice = json[toToken.id].usd;
 
     const expected = (amount * fromPrice) / toPrice;
-    const fee = expected * 0.005;
+    const fee = expected * 0.01;
     const received = expected - fee;
 
     priceInfo.innerText = `${fromToken.symbol} ≈ ${fromPrice.toFixed(2)} USDT`;
     receiveInfo.innerText = `You will receive: ${received.toFixed(4)} ${toToken.symbol}`;
-    feeInfo.innerText = `0.5% fee`;
+    feeInfo.innerText = `1% fee`;
 
   } catch (err) {
     priceInfo.innerText = "❌ Failed to fetch price.";

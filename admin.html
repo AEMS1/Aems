@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Admin Panel</h1>
+
+  <section>
+    <h2>Config</h2>
+    <label>Entry Cost (AMS): <input type="number" id="entryCost" /></label>
+    <label>Reward 30d: <input type="number" id="reward30d" /></label>
+    <label>Reward 60d: <input type="number" id="reward60d" /></label>
+    <label>Min BNB 30d: <input type="number" id="minBnb30" /></label>
+    <label>Min BNB 60d: <input type="number" id="minBnb60" /></label>
+    <button onclick="saveSettings()">Save</button>
+  </section>
+
+  <section>
+    <h2>Reset Auctions</h2>
+    <button onclick="resetAuction(30)">Reset 30-Day Auction</button>
+    <button onclick="resetAuction(60)">Reset 60-Day Auction</button>
+  </section>
+
+  <a href="index1.html">← Back</a>
+
+  <script>
+    function saveSettings() {
+      alert("Settings saved (not functional in this demo)");
+    }
+
+    function resetAuction(days) {
+      alert("Auction " + days + "d reset (not functional in this demo)");
+    }
+  </script>
+</body>
+</html>

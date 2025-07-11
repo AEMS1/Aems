@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auction</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🚀 Auction</h1>
+    <button id="connectWallet">Connect Wallet</button>
+  </header>
+
+  <main>
+    <section class="entry-section">
+      <h2>Enter Auction Access</h2>
+      <p>Pay <strong>1500 AMS</strong> to participate in auctions for 65 days.</p>
+      <button id="payEntry">Enter with AMS</button>
+    </section>
+
+    <section class="auctions">
+      <div class="auction-box" id="auction30">
+        <h3>30-Day Auction</h3>
+        <p>Reward: <span id="reward30">10,000 AMS</span></p>
+        <p>Min Bid: <span id="minBnb30">0.001 BNB</span></p>
+        <p>Time Left: <span id="timer30">Loading...</span></p>
+        <input type="number" id="bidAmount30" placeholder="BNB to bid" />
+        <button class="bidBtn" data-days="30">Place Bid</button>
+        <h4>Top 3 Bidders:</h4>
+        <ul id="topBidders30"></ul>
+        <h4>Participants:</h4>
+        <ul id="participants30"></ul>
+      </div>
+
+      <div class="auction-box" id="auction60">
+        <h3>60-Day Auction</h3>
+        <p>Reward: <span id="reward60">35,000 AMS</span></p>
+        <p>Min Bid: <span id="minBnb60">0.002 BNB</span></p>
+        <p>Time Left: <span id="timer60">Loading...</span></p>
+        <input type="number" id="bidAmount60" placeholder="BNB to bid" />
+        <button class="bidBtn" data-days="60">Place Bid</button>
+        <h4>Top 3 Bidders:</h4>
+        <ul id="topBidders60"></ul>
+        <h4>Participants:</h4>
+        <ul id="participants60"></ul>
+      </div>
+    </section>
+
+    <a href="admin.html" id="adminLink" style="display:none">Go to Admin Panel</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="abi.js"></script>
+  <script src="main1.js"></script>
+</body>
+</html>
